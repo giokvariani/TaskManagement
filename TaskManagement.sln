@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Infrastructure.Persistence", "TaskManagement.Infrastructure.Persistence\TaskManagement.Infrastructure.Persistence.csproj", "{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{DE225B47-AB90-4476-B55B-A99BC235BE4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{770AD711-C07D-46D7-8CFF-32C34ADA48D9} = {DE225B47-AB90-4476-B55B-A99BC235BE4C}
 		{BA6D1819-533B-46EA-BCD9-40834A9D7F92} = {FE9FAA2B-A61D-4D64-8990-C9A3CB16BF4C}
 		{D80FAD23-D845-4308-B315-49DC8318B3E8} = {FE9FAA2B-A61D-4D64-8990-C9A3CB16BF4C}
 		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E} = {08ADAEAC-C352-4D3F-8DE8-88E763028528}

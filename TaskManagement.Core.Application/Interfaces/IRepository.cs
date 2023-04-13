@@ -3,7 +3,7 @@ using TaskManagement.Core.Domain.Entities;
 
 namespace TaskManagement.Core.Application.Interfaces
 {
-    internal interface IRepository<TEntity> where TEntity : BaseEnitty
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         Task<int> CreateAsync(TEntity entity);
         Task<TEntity?> GetAsync(int id);

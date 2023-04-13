@@ -1,6 +1,6 @@
 ﻿namespace TaskManagement.Core.Domain.Entities
 {
-    public class BaseEnitty
+    public class BaseEntity
     {
         public int Id { get; set; }
         public DateTime CreatedOn { get; set; }

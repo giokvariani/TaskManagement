@@ -1,6 +1,6 @@
 ﻿namespace TaskManagement.Core.Domain.Entities
 {
-    public class User2Role : BaseEnitty
+    public class User2Role : BaseEntity
     {
         public int UserId { get; set; }
         public User User { get; set; }

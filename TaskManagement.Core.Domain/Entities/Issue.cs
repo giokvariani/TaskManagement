@@ -1,6 +1,6 @@
 ﻿namespace TaskManagement.Core.Domain.Entities
 {
-    public class Issue : BaseEnitty
+    public class Issue : BaseEntity
     {
         public string Title { get; set; }
         public string Descritpion { get; set; }
