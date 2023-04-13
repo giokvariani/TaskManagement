@@ -11,6 +11,5 @@ namespace TaskManagement.Infrastructure.Persistence.DataLayer
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Issue> Issues { get; set; }
-
     }
 }
