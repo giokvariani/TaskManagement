@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagement.API", "TaskM
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FE9FAA2B-A61D-4D64-8990-C9A3CB16BF4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Core.Domain", "TaskManagement.Core.Domain\TaskManagement.Core.Domain.csproj", "{BA6D1819-533B-46EA-BCD9-40834A9D7F92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagement.Core.Domain", "TaskManagement.Core.Domain\TaskManagement.Core.Domain.csproj", "{BA6D1819-533B-46EA-BCD9-40834A9D7F92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Core.Application", "TaskManagement.Core.Application\TaskManagement.Core.Application.csproj", "{D80FAD23-D845-4308-B315-49DC8318B3E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{08ADAEAC-C352-4D3F-8DE8-88E763028528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Infrastructure.Persistence", "TaskManagement.Infrastructure.Persistence\TaskManagement.Infrastructure.Persistence.csproj", "{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +29,22 @@ Global
 		{BA6D1819-533B-46EA-BCD9-40834A9D7F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA6D1819-533B-46EA-BCD9-40834A9D7F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA6D1819-533B-46EA-BCD9-40834A9D7F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80FAD23-D845-4308-B315-49DC8318B3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80FAD23-D845-4308-B315-49DC8318B3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80FAD23-D845-4308-B315-49DC8318B3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80FAD23-D845-4308-B315-49DC8318B3E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BA6D1819-533B-46EA-BCD9-40834A9D7F92} = {FE9FAA2B-A61D-4D64-8990-C9A3CB16BF4C}
+		{D80FAD23-D845-4308-B315-49DC8318B3E8} = {FE9FAA2B-A61D-4D64-8990-C9A3CB16BF4C}
+		{5C44E4F1-E4D8-45A1-9F34-18115B8C508E} = {08ADAEAC-C352-4D3F-8DE8-88E763028528}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5F8594F-5A60-4590-BC6E-F0AE45C00B8A}
