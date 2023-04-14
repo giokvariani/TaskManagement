@@ -19,6 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPersonalAccessTokenRepository, PersonalAccessTokenRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -40,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = "BearerB" // The ID of the security scheme (e.g., "Bearer" or "ApiKey")
+                        Id = "Bearer" // The ID of the security scheme (e.g., "Bearer" or "ApiKey")
                     }
                 },
                 Array.Empty<string>() // The list of scopes (if any) required for this security scheme

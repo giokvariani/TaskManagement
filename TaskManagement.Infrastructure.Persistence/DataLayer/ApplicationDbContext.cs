@@ -11,6 +11,7 @@ namespace TaskManagement.Infrastructure.Persistence.DataLayer
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Issue> Issues { get; set; }
+        public DbSet<PersonalAccessToken> PersonalAccessTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,7 +23,7 @@ namespace TaskManagement.Infrastructure.Persistence.DataLayer
                 .WithOne(x => x.Reporter)
                 .HasForeignKey(x => x.ReporterId);
 
-            base.OnModelCreating(modelBuilder); 
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -2,7 +2,8 @@
 
 namespace TaskManagement.Core.Application.Interfaces
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IPersonalAccessTokenRepository : IRepository<PersonalAccessToken>
     {
+
     }
 }
