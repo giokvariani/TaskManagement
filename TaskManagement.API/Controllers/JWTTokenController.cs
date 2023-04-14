@@ -29,10 +29,10 @@ namespace TaskManagement.API.Controllers
             if (user == null)
                 throw new InvalidOperationException("Invalid identifier or password");
 
-            var tokens = await _personalAccessTokenRepository.GetAsync(x => x.UserId == user.Id);
-            var lastToken = tokens.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-            if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(-20))
-                return BadRequest("Please use already generated token");
+            //var tokens = await _personalAccessTokenRepository.GetAsync(x => x.UserId == user.Id);
+            //var lastToken = tokens.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+            //if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(-20))
+            //    return BadRequest("Please use already generated token");
 
             var jwt = _configiuration.GetSection("Jwt").Get<Jwt>();
             var claims = new[]
@@ -47,15 +47,16 @@ namespace TaskManagement.API.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(jwt.Issuer, jwt.Audience, claims, expires: DateTime.Now.AddMinutes(20), signingCredentials: signIn);
-            var personalAccessToken = new PersonalAccessToken() { Identifier = identifier, Password = password, CreatedOn = DateTime.Now, UserId = user.Id, Value = token.ToString() };
+            var generatedKey = new JwtSecurityTokenHandler().WriteToken(token);
+            var personalAccessToken = new PersonalAccessToken() { Identifier = identifier, Password = password, CreatedOn = DateTime.Now, UserId = user.Id, Value = generatedKey };
             await _personalAccessTokenRepository.CreateAsync(personalAccessToken);
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            return Ok(generatedKey);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ShowValidToken(string identifier, string password)
-        {
-            _personalAccessTokenRepository.GetAsync(x => x.Identifier == identifier);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> ShowValidToken(string identifier, string password)
+        //{
+        //    _personalAccessTokenRepository.GetAsync(x => x.Identifier == identifier);
+        //}
     }
 }
