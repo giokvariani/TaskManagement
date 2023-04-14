@@ -10,6 +10,12 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _context;
+
+        public Repository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<bool> CheckAsync(Expression<Func<T, bool>> predicate) => await _context.Set<T>().AnyAsync(predicate);
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate) => await _context.Set<T>().CountAsync(predicate);
         public async Task<int> CreateAsync(T entity)
