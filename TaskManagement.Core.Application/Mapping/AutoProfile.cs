@@ -10,6 +10,8 @@ namespace TaskManagement.Core.Application.Mapping
         {
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, IdempotentUserDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<Role, IdempotentRoleDto>().ReverseMap();
         }
     }
 }

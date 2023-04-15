@@ -1,0 +1,14 @@
+Insert into Roles (Name, CreatedOn, Persmissions)
+Values ('Admin', GetDate(), 15)
+
+Insert into Roles (Name, CreatedOn, Persmissions)
+Values ('Product Owner', GetDate(), 11)
+
+Insert into Roles (Name, CreatedOn, Persmissions)
+Values ('Intern Product Owner', GetDate(), 9)
+
+Insert into Roles (Name, CreatedOn, Persmissions)
+Values ('Developer', GetDate(), 11)
+
+Insert into Roles (Name, CreatedOn, Persmissions)
+Values ('Intern developer', GetDate(), 9)
