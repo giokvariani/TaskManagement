@@ -11,8 +11,6 @@ namespace TaskManagement.Core.Application.Interfaces
         Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<int> UpdateAsync(TEntity entity);
-        Task<int> UpdateAsync(int id, TEntity entity);
-
         Task<int> DeleteAsync(int id);
         Task<int> DeleteAsync(TEntity entity);
         Task<int> DeleteRangeAsync(IEnumerable<TEntity> entity);

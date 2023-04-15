@@ -11,12 +11,12 @@ namespace TaskManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JWTTokenController : ControllerBase
+    public class AuthorizeController : ControllerBase
     {
         public IConfiguration _configiuration;
         public IUserRepository _userRepository;
         public IPersonalAccessTokenRepository _personalAccessTokenRepository;
-        public JWTTokenController(IConfiguration configiuration, IUserRepository userRepository , IPersonalAccessTokenRepository personalAccessTokenRepository)
+        public AuthorizeController(IConfiguration configiuration, IUserRepository userRepository , IPersonalAccessTokenRepository personalAccessTokenRepository)
         {
             _configiuration = configiuration;
             _userRepository = userRepository;
@@ -29,10 +29,10 @@ namespace TaskManagement.API.Controllers
             if (user == null)
                 throw new InvalidOperationException("Invalid identifier or password");
 
-            //var tokens = await _personalAccessTokenRepository.GetAsync(x => x.UserId == user.Id);
-            //var lastToken = tokens.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-            //if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(-20))
-            //    return BadRequest("Please use already generated token");
+            var tokens = await _personalAccessTokenRepository.GetAsync(x => x.UserId == user.Id);
+            var lastToken = tokens.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+            if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(-20))
+                return BadRequest("Please use already generated token");
 
             var jwt = _configiuration.GetSection("Jwt").Get<Jwt>();
             var claims = new[]
@@ -46,6 +46,7 @@ namespace TaskManagement.API.Controllers
                     };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            //TO DO expire Config
             var token = new JwtSecurityToken(jwt.Issuer, jwt.Audience, claims, expires: DateTime.Now.AddMinutes(20), signingCredentials: signIn);
             var generatedKey = new JwtSecurityTokenHandler().WriteToken(token);
             var personalAccessToken = new PersonalAccessToken() { Identifier = identifier, Password = password, CreatedOn = DateTime.Now, UserId = user.Id, Value = generatedKey };
@@ -53,10 +54,13 @@ namespace TaskManagement.API.Controllers
             return Ok(generatedKey);
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> ShowValidToken(string identifier, string password)
-        //{
-        //    _personalAccessTokenRepository.GetAsync(x => x.Identifier == identifier);
-        //}
+        [HttpGet("ShowValidToken")]
+        public async Task<ActionResult> ShowValidToken(string identifier, string password)
+        {
+            var personalAccessTokens = (await _personalAccessTokenRepository.GetAsync(x => x.Identifier == identifier && password == x.Password)).ToList();
+            //TO DO expire Config
+            var activeTokens = personalAccessTokens.Where(x => x.CreatedOn.AddMinutes(20) > DateTime.Now).OrderBy(x => x.Identifier);
+            return Ok(activeTokens);
+        }
     }
 }

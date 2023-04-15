@@ -54,13 +54,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
 
         public async Task<int> UpdateAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> UpdateAsync(int id, T entity)
-        {
-            var enittyInDatabase = await GetAsync(id);
+            var enittyInDatabase = await GetAsync(entity.Id);
             if (enittyInDatabase == null)
                 throw new EntityNotFoundException("ჩანაწერი ვერ მოიძებნა");
             _context.Entry(enittyInDatabase).CurrentValues.SetValues(entity);

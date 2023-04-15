@@ -30,10 +30,25 @@ namespace TaskManagement.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get([FromRoute] int id)
+        public async Task<ActionResult> Get(int id)
         {
             var user = await _userRepository.GetAsync(id);
+            
             return Ok(user);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _userRepository.DeleteAsync(id);
+            return Ok(result); 
+        }
+        [HttpPut]
+        public async Task<ActionResult> Update(IdempotentUserDto idempotentUserDto)
+        {
+            var user = _mapper.Map<User>(idempotentUserDto);
+            var result =  await _userRepository.UpdateAsync(user);
+            return Ok(result);
         }
     }
 }
