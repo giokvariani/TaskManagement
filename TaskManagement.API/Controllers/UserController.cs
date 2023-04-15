@@ -22,7 +22,7 @@ namespace TaskManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateUserDto createUserDto)
+        public async Task<ActionResult> Create(UserDto createUserDto)
         {
             var user = _mapper.Map<User>(createUserDto);
             var result = await _userRepository.CreateAsync(user);

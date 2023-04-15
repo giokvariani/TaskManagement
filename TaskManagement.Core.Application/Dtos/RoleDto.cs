@@ -1,6 +1,7 @@
 ﻿namespace TaskManagement.Core.Application.Dtos
 {
-    public class CreateUserDto : UserDto
+    public class RoleDto
     {
+        public string Name { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace TaskManagement.Core.Application.Mapping
     {
         public AutoProfile()
         {
-            CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, IdempotentUserDto>().ReverseMap();
         }
     }
