@@ -12,6 +12,7 @@ namespace TaskManagement.Infrastructure.Persistence.DataLayer
         public DbSet<Role> Roles { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<PersonalAccessToken> PersonalAccessTokens { get; set; }
+        public DbSet<User2Role> User2Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

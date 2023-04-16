@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Core.Application.Dtos;
 using TaskManagement.Core.Application.Interfaces;
@@ -8,7 +9,7 @@ namespace TaskManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class IssueController : ControllerBase
     {
         private readonly IIssueRepository _IssueRepository;

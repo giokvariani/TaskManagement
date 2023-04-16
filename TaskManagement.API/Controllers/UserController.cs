@@ -29,6 +29,19 @@ namespace TaskManagement.API.Controllers
             return Ok(user);
         }
 
+        [HttpPost("DefineRole")]
+        public async Task<ActionResult> DefineRole(int userId, int roleId)
+        {
+            var result = await _userRepository.DefineRole(userId, roleId);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteRole")]
+        public async Task<ActionResult> DeleteRule(int userId, int roleId)
+        {
+            var result = await _userRepository.DeleteRole(userId, roleId);
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {

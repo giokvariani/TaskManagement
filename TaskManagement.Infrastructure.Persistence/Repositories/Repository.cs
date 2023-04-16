@@ -9,7 +9,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _context;
 
         public Repository(ApplicationDbContext context)
         {
@@ -47,7 +47,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
 
         public async Task<IEnumerable<T>> GetAsync() => await _context.Set<T>().ToListAsync();
 
-        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }

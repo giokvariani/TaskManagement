@@ -1,3 +1,13 @@
+--Admin
+insert into Users (UserName, Email, Password, FirstName, LastName, CreatedOn)
+Values ('Admin', 'Admin@gmail.com', 'Admin', 'Admin', 'Admin', GETDATE())
+--Admin
+
+
+
+
+
+--Roles
 Insert into Roles (Name, CreatedOn, Persmissions)
 Values ('Admin', GetDate(), 15)
 
@@ -12,3 +22,4 @@ Values ('Developer', GetDate(), 11)
 
 Insert into Roles (Name, CreatedOn, Persmissions)
 Values ('Intern developer', GetDate(), 9)
+--Roles
