@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FE9FAA2B-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagement.Core.Domain", "TaskManagement.Core.Domain\TaskManagement.Core.Domain.csproj", "{BA6D1819-533B-46EA-BCD9-40834A9D7F92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Core.Application", "TaskManagement.Core.Application\TaskManagement.Core.Application.csproj", "{D80FAD23-D845-4308-B315-49DC8318B3E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagement.Core.Application", "TaskManagement.Core.Application\TaskManagement.Core.Application.csproj", "{D80FAD23-D845-4308-B315-49DC8318B3E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{08ADAEAC-C352-4D3F-8DE8-88E763028528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Infrastructure.Persistence", "TaskManagement.Infrastructure.Persistence\TaskManagement.Infrastructure.Persistence.csproj", "{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagement.Infrastructure.Persistence", "TaskManagement.Infrastructure.Persistence\TaskManagement.Infrastructure.Persistence.csproj", "{5C44E4F1-E4D8-45A1-9F34-18115B8C508E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{DE225B47-AB90-4476-B55B-A99BC235BE4C}"
 EndProject
