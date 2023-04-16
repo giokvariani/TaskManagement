@@ -9,7 +9,7 @@ namespace TaskManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize("Admin")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;

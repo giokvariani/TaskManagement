@@ -7,5 +7,6 @@ namespace TaskManagement.Core.Domain.Entities
         public string Name { get; set; }
         public PermissionType Persmissions { get; set; }
         public ICollection<User2Role> Users { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

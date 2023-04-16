@@ -25,7 +25,7 @@ builder.Services.AddScoped<IPersonalAccessTokenRepository, PersonalAccessTokenRe
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 
-builder.Services.AddScoped<CustomMiddleware>();
+builder.Services.AddScoped<RoleMiddleware>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -84,7 +84,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 
-app.UseMiddleware<CustomMiddleware>();
+app.UseMiddleware<RoleMiddleware>();
 
 app.UseAuthorization();
 
