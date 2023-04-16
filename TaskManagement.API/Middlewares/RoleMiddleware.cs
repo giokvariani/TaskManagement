@@ -37,7 +37,7 @@ namespace TaskManagement.API.Middlewares
                 var userName = context.User.Claims.SingleOrDefault(x => x.Type == "UserName")?.Value;
                 var password = context.User.Claims.SingleOrDefault(x => x.Type == "Password")?.Value;
                 if (userName == null && password == null)
-                    throw new InvalidOperationException("Please log in at first");
+                    throw new InvalidOperationException("Generate Token at First and input like -> Bearer ey7......mgl");
                 await using var scope = _serviceScopeFactory.CreateAsyncScope();
                 var userRepository = scope.ServiceProvider.GetService<IUserRepository>()!;
                 var user = (await userRepository.GetAsync(x => x.UserName == userName && x.Password == password)).SingleOrDefault();
