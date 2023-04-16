@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManagement.API.Migrations
 {
     /// <inheritdoc />
-    public partial class M4432 : Migration
+    public partial class Migration544 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,8 @@ namespace TaskManagement.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Persmissions = table.Column<int>(type: "int", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -73,7 +75,30 @@ namespace TaskManagement.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User2Role",
+                name: "PersonalAccessTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalAccessTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonalAccessTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User2Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -84,15 +109,15 @@ namespace TaskManagement.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User2Role", x => x.Id);
+                    table.PrimaryKey("PK_User2Roles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User2Role_Roles_RoleId",
+                        name: "FK_User2Roles_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_User2Role_Users_UserId",
+                        name: "FK_User2Roles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -110,13 +135,18 @@ namespace TaskManagement.API.Migrations
                 column: "ReporterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User2Role_RoleId",
-                table: "User2Role",
+                name: "IX_PersonalAccessTokens_UserId",
+                table: "PersonalAccessTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User2Roles_RoleId",
+                table: "User2Roles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User2Role_UserId",
-                table: "User2Role",
+                name: "IX_User2Roles_UserId",
+                table: "User2Roles",
                 column: "UserId");
         }
 
@@ -127,7 +157,10 @@ namespace TaskManagement.API.Migrations
                 name: "Issues");
 
             migrationBuilder.DropTable(
-                name: "User2Role");
+                name: "PersonalAccessTokens");
+
+            migrationBuilder.DropTable(
+                name: "User2Roles");
 
             migrationBuilder.DropTable(
                 name: "Roles");

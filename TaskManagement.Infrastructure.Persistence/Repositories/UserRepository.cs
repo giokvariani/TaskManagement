@@ -17,7 +17,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         {
             get
             {
-                return _context.Users.Include(x => x.Roles);
+                return _context.Users.Include(x => x.Roles).ThenInclude(x => x.Role);
             }
         }
 

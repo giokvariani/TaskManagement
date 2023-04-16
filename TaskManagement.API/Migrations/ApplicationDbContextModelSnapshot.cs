@@ -174,7 +174,7 @@ namespace TaskManagement.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("User2Role");
+                    b.ToTable("User2Roles");
                 });
 
             modelBuilder.Entity("TaskManagement.Core.Domain.Entities.Issue", b =>

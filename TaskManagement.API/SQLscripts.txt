@@ -8,18 +8,22 @@ Values ('Admin', 'Admin@gmail.com', 'Admin', 'Admin', 'Admin', GETDATE())
 
 
 --Roles
-Insert into Roles (Name, CreatedOn, Persmissions)
-Values ('Admin', GetDate(), 15)
+Insert into Roles (Name, CreatedOn, Persmissions, IsAdmin)
+Values ('Admin', GetDate(), 15, 1)
 
-Insert into Roles (Name, CreatedOn, Persmissions)
-Values ('Product Owner', GetDate(), 11)
+Insert into Roles (Name, CreatedOn, Persmissions, IsAdmin)
+Values ('Product Owner', GetDate(), 11, 0)
 
-Insert into Roles (Name, CreatedOn, Persmissions)
-Values ('Intern Product Owner', GetDate(), 9)
+Insert into Roles (Name, CreatedOn, Persmissions, IsAdmin)
+Values ('Intern Product Owner', GetDate(), 9, 0)
 
-Insert into Roles (Name, CreatedOn, Persmissions)
-Values ('Developer', GetDate(), 11)
+Insert into Roles (Name, CreatedOn, Persmissions, IsAdmin)
+Values ('Developer', GetDate(), 11, 0)
 
-Insert into Roles (Name, CreatedOn, Persmissions)
-Values ('Intern developer', GetDate(), 9)
+Insert into Roles (Name, CreatedOn, Persmissions, IsAdmin)
+Values ('Intern developer', GetDate(), 9, 0)
 --Roles
+
+--User2Roles
+Insert into User2Roles(UserId, RoleId, CreatedOn)
+Values(1, 1, GetDate())

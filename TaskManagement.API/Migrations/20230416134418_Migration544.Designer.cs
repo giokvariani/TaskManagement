@@ -12,8 +12,8 @@ using TaskManagement.Infrastructure.Persistence.DataLayer;
 namespace TaskManagement.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230414130439_M504")]
-    partial class M504
+    [Migration("20230416134418_Migration544")]
+    partial class Migration544
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,9 +103,15 @@ namespace TaskManagement.API.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Persmissions")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -171,7 +177,7 @@ namespace TaskManagement.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("User2Role");
+                    b.ToTable("User2Roles");
                 });
 
             modelBuilder.Entity("TaskManagement.Core.Domain.Entities.Issue", b =>
