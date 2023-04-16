@@ -12,6 +12,8 @@ namespace TaskManagement.Core.Application.Mapping
             CreateMap<User, IdempotentUserDto>().ReverseMap();
             CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<Role, IdempotentRoleDto>().ReverseMap();
+            CreateMap<Issue, IssueDto>().ReverseMap();
+            CreateMap<Issue, IdempotentIssueDto>().ReverseMap();
         }
     }
 }
