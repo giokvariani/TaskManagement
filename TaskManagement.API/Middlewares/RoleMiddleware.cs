@@ -34,8 +34,6 @@ namespace TaskManagement.API.Middlewares
                 await next(context); 
                 return;
             }
-                
-
             var userName = context.User.Claims.SingleOrDefault(x => x.Type == "UserName")?.Value;
             var password = context.User.Claims.SingleOrDefault(x => x.Type == "Password")?.Value;
             if (userName == null && password == null)
@@ -64,11 +62,11 @@ namespace TaskManagement.API.Middlewares
                 var flattenedArray = persmissions.SelectMany(flag => Enum.GetValues(typeof(PermissionType))
                                                     .OfType<PermissionType>()
                                                     .Where(f => flag.HasFlag(f))
-                                                    .ToArray()).Distinct().ToArray().Select(x => x.ToString());
+                                                    .ToArray()).Distinct().Select(x => x.ToString().ToUpper());
                 var methodVerb = context.Request.Method;
-                var targetHttpVerb = StaticHelper.StaticHelper.HttpVerbsMap.Where(x => x.Value.Length > 1 && x.Value.Any(v => v == methodVerb));
-                var httpMethodTarget = targetHttpVerb.Any() ? targetHttpVerb.Single().Key : methodVerb;
 
+                var targetHttpVerb = StaticHelper.StaticHelper.HttpVerbsMap.Where(x => x.Value.Length > 1 && x.Value.Any(v => v == methodVerb));
+                var httpMethodTarget = targetHttpVerb.Any() ? targetHttpVerb.Single().Key.ToUpper() : methodVerb;
 
                 if (flattenedArray.Any(x => x == httpMethodTarget))
                     await next(context);

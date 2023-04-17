@@ -23,6 +23,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPersonalAccessTokenRepository, PersonalAccessTokenRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IIssueRepository, IssueRepository>();
+
 
 
 builder.Services.AddScoped<RoleMiddleware>();
