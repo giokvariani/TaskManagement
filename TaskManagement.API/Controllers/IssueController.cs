@@ -12,27 +12,35 @@ namespace TaskManagement.API.Controllers
     [Authorize]
     public class IssueController : ControllerBase
     {
-        private readonly IIssueRepository _IssueRepository;
+        private readonly IIssueRepository _issueRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public IssueController(IIssueRepository IssueRepository, IMapper mapper)
+        public IssueController(IIssueRepository issueRepository, IUserRepository userRepository, IMapper mapper)
         {
-            _IssueRepository = IssueRepository;
+            _issueRepository = issueRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(IssueDto IssueDto)
+        public async Task<ActionResult> Create(IssueDto issueDto)
         {
-            var issue = _mapper.Map<Issue>(IssueDto);
-            var result = await _IssueRepository.CreateAsync(issue);
+            var userName = User.Claims.SingleOrDefault(x => x.Type == "UserName")?.Value;
+            var password = User.Claims.SingleOrDefault(x => x.Type == "Password")?.Value;
+            var user = (await _userRepository.GetAsync(x => x.UserName == userName)).Single();
+            issueDto.ReporterId = user.Id;
+            issueDto.Status = Core.Domain.Enums.IssueStatusType.Open;
+
+            var issue = _mapper.Map<Issue>(issueDto);
+            var result = await _issueRepository.CreateAsync(issue);
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var Issue = await _IssueRepository.GetAsync(id);
+            var Issue = await _issueRepository.GetAsync(id);
 
             return Ok(Issue);
         }
@@ -40,7 +48,7 @@ namespace TaskManagement.API.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _IssueRepository.DeleteAsync(id);
+            var result = await _issueRepository.DeleteAsync(id);
             return Ok(result);
         }
 
@@ -48,7 +56,7 @@ namespace TaskManagement.API.Controllers
         public async Task<ActionResult> Update(IdempotentIssueDto idempotentIssueDto)
         {
             var Issue = _mapper.Map<Issue>(idempotentIssueDto);
-            var result = await _IssueRepository.UpdateAsync(Issue);
+            var result = await _issueRepository.UpdateAsync(Issue);
             return Ok(result);
         }
     }

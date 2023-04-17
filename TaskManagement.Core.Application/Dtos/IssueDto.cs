@@ -1,4 +1,6 @@
-﻿namespace TaskManagement.Core.Application.Dtos
+﻿using TaskManagement.Core.Domain.Enums;
+
+namespace TaskManagement.Core.Application.Dtos
 {
     public class IssueDto
     {
@@ -6,5 +8,6 @@
         public string Descritpion { get; set; }
         public int ReporterId { get; set; }
         public int AssigneeId { get; set; }
+        public IssueStatusType Status { get; set; }
     }
 }

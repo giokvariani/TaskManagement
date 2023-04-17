@@ -1,20 +1,14 @@
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
 using TaskManagement.API.Middlewares;
 using TaskManagement.Core.Application.ExtensionMethods;
-using TaskManagement.Core.Application.Features.Commands.User;
 using TaskManagement.Core.Application.Interfaces;
 using TaskManagement.Infrastructure.Persistence.ExtensionMethods;
 using TaskManagement.Infrastructure.Persistence.Repositories;
-using static TaskManagement.Core.Application.Features.Commands.User.UpdateUserCommand;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
@@ -32,9 +26,7 @@ builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 builder.Services.AddScoped<IUser2RoleRepository, User2RoleRepository>();
 
 
-
 builder.Services.AddScoped<RoleMiddleware>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -66,7 +58,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -81,13 +73,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => 
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskManagementJWTToken.v11"));
 }
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
