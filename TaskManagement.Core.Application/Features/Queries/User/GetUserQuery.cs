@@ -26,7 +26,7 @@ namespace TaskManagement.Core.Application.Features.Queries.User
             {
                 var user = await _userRepository.GetAsync(request.UserId);
                 if (user == null)
-                    throw new EntityNotFoundException("იუზერი ვერ მოიძებნა");
+                    throw new EntityNotFoundException();
                 var idempotentUser = _mapper.Map<IdempotentUserDto>(user);
                 return idempotentUser;
             }

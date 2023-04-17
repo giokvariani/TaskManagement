@@ -4,7 +4,7 @@ namespace TaskManagement.Core.Application.Exceptions
 {
     public class EntityNotFoundException : EntityValidationException
     {
-        public EntityNotFoundException(string message) : base(message)
+        public EntityNotFoundException() : base("ჩანაწერი არ მოიძებნა")
         {
         }
         public override HttpStatusCode StatusCode => HttpStatusCode.NotFound;

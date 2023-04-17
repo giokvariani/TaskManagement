@@ -42,7 +42,7 @@ namespace TaskManagement.API.Middlewares
             var userRepository = scope.ServiceProvider.GetService<IUserRepository>()!;
             var user = (await userRepository.GetAsync(x => x.UserName == userName && x.Password == password)).SingleOrDefault();
             if (user == null)
-                throw new EntityNotFoundException("Couldn't find the object");
+                throw new EntityNotFoundException();
             var userIsAdmin = user.Roles.Select(x => x.Role).Any(x => x.IsAdmin);
             if (userIsAdmin)
             {

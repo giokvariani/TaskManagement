@@ -14,12 +14,6 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         {
         }
         public IQueryable<User> IncludingData => _context.Users.Include(x => x.Roles).ThenInclude(x => x.Role);
-        public async Task CheckExistingUser(Expression<Func<User, bool>> predicate, Tuple<string, string> targetIdentifier)
-        {
-            var potentialExistingUser = (await GetAsync(predicate)).SingleOrDefault();
-            if (potentialExistingUser != null)
-                throw new ValidationException($"{targetIdentifier.Item1}:{targetIdentifier.Item2} უკვე გამოყენებულია!");
-        }
         public async Task<int> DefineRole(int userId, int roleId)
         {
             var user2Role = new User2Role()
@@ -34,7 +28,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         {
             var user2Role = _context.User2Roles.SingleOrDefault(x => x.RoleId == roleId && x.UserId == userId);
             if (user2Role == null)
-                throw new EntityNotFoundException("ჩანაწერი არ მოიძებნა");
+                throw new EntityNotFoundException();
 
             _context.User2Roles.Remove(user2Role);
             return await _context.SaveChangesAsync();

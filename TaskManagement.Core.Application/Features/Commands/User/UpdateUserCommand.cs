@@ -23,11 +23,11 @@ namespace TaskManagement.Core.Application.Features.Commands.User
             }
             public async Task<int> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
             {
-                await _userRepository.CheckExistingUser(x => 
+                await _userRepository.CheckExisting(x => 
                 x.UserName == request.User.UserName && x.Id != request.User.Id, 
                 Tuple.Create(nameof(request.User.UserName), request.User.UserName) );
 
-                await _userRepository.CheckExistingUser(x => x.Email == request.User.Email && x.Id != request.User.Id, 
+                await _userRepository.CheckExisting(x => x.Email == request.User.Email && x.Id != request.User.Id, 
                     Tuple.Create(nameof(request.User.Email), request.User.Email));
 
                 var user = _mapper.Map<Domain.Entities.User>(request.User);

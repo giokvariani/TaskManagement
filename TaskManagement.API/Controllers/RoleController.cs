@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.API.Attributes;
 using TaskManagement.Core.Application.Dtos;
-using TaskManagement.Core.Application.Interfaces;
-using TaskManagement.Core.Domain.Entities;
+using TaskManagement.Core.Application.Features.Commands.Role;
+using TaskManagement.Core.Application.Features.Queries.Role;
 
 namespace TaskManagement.API.Controllers
 {
@@ -12,43 +12,44 @@ namespace TaskManagement.API.Controllers
     [AdminPrivilege]
     public class RoleController : ControllerBase
     {
-        private readonly IRoleRepository _roleRepository;
-        private readonly IMapper _mapper;
-
-        public RoleController(IRoleRepository roleRepository, IMapper mapper)
+        private readonly IMediator _mediator;
+        public RoleController(IMediator mediator)
         {
-            _roleRepository = roleRepository;
-            _mapper = mapper;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Create(RoleDto roleDto)
-        {
-            var role = _mapper.Map<Role>(roleDto);
-            var result = await _roleRepository.CreateAsync(role);
-            return Ok(result);
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var role = await _roleRepository.GetAsync(id);
-
+            var role = await _mediator.Send(new GetRoleQuery(id));
             return Ok(role);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var roles = await _mediator.Send(new GetRolesQuery());
+            return Ok(roles);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(RoleDto createRoleDto)
+        {
+            var result = await _mediator.Send(new CreateRoleCommand(createRoleDto));
+            return Ok(result);
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _roleRepository.DeleteAsync(id);
+            var result = await _mediator.Send(new DeleteRoleCommand(id));
             return Ok(result);
         }
 
         [HttpPut]
         public async Task<ActionResult> Update(IdempotentRoleDto idempotentRoleDto)
         {
-            var role = _mapper.Map<Role>(idempotentRoleDto);
-            var result = await _roleRepository.UpdateAsync(role);
+            var result = await _mediator.Send(new UpdateRoleCommand(idempotentRoleDto));
             return Ok(result);
         }
     }

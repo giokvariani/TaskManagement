@@ -1,6 +1,6 @@
 ﻿namespace TaskManagement.Core.Application.Dtos
 {
-    public class IdempotentRoleDto
+    public class IdempotentRoleDto : RoleDto
     {
         public int Id { get; set; }
     }

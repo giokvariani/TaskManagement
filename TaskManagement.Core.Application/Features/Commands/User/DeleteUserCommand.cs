@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using TaskManagement.Core.Application.Exceptions;
 using TaskManagement.Core.Application.Interfaces;
 
@@ -23,7 +22,7 @@ namespace TaskManagement.Core.Application.Features.Commands.User
             {
                 var user = await _userRepository.GetAsync(request.UserId);
                 if (user == null)
-                    throw new EntityNotFoundException("ჩანაწერი არ მოიძებნა!");
+                    throw new EntityNotFoundException();
                 var result = await _userRepository.DeleteAsync(request.UserId);
                 return result;
             }

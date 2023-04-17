@@ -25,7 +25,7 @@ namespace TaskManagement.Core.Application.Features.Commands.User
             {
                 var user2Role = (await _user2RoleRepository.GetAsync(x => x.UserId == request.UserId && x.RoleId == request.RoleId)).SingleOrDefault();
                 if (user2Role == null)
-                    throw new EntityNotFoundException("ჩანაწერი არ მოიძებნა");
+                    throw new EntityNotFoundException();
 
                 var adminUsers = await _user2RoleRepository.GetAsync(x => x.Role.IsAdmin);
                 if (adminUsers.Count() == 1 && adminUsers.First().UserId == user2Role.UserId)

@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.API.Attributes;
 using TaskManagement.Core.Application.Dtos;
 using TaskManagement.Core.Application.Features.Commands.User;
 using TaskManagement.Core.Application.Features.Queries.User;
-using TaskManagement.Core.Application.Interfaces;
 
 namespace TaskManagement.API.Controllers
 {

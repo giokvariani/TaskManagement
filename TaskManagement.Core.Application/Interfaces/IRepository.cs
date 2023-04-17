@@ -18,5 +18,6 @@ namespace TaskManagement.Core.Application.Interfaces
         Task<bool> CheckAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
+        Task CheckExisting(Expression<Func<TEntity, bool>> predicate, Tuple<string, string> targetIdentifier);
     }
 }
