@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -5,9 +6,11 @@ using System.Reflection;
 using System.Text;
 using TaskManagement.API.Middlewares;
 using TaskManagement.Core.Application.ExtensionMethods;
+using TaskManagement.Core.Application.Features.Commands.User;
 using TaskManagement.Core.Application.Interfaces;
 using TaskManagement.Infrastructure.Persistence.ExtensionMethods;
 using TaskManagement.Infrastructure.Persistence.Repositories;
+using static TaskManagement.Core.Application.Features.Commands.User.UpdateUserCommand;
 
 var builder = WebApplication.CreateBuilder(args);
 
