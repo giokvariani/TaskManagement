@@ -14,8 +14,8 @@ namespace TaskManagement.Core.Application.Features.Commands.User
         public IdempotentUserDto User { get; }
         public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, int>
         {
-            protected readonly IUserRepository _userRepository;
-            protected readonly IMapper _mapper;
+            private readonly IUserRepository _userRepository;
+            private readonly IMapper _mapper;
             public UpdateUserCommandHandler(IUserRepository userRepository, IMapper mapper)
             {
                 _userRepository = userRepository;

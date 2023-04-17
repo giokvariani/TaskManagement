@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using System.ComponentModel.DataAnnotations;
 using TaskManagement.API.Attributes;
 using TaskManagement.Core.Application.Exceptions;
 using TaskManagement.Core.Application.Interfaces;

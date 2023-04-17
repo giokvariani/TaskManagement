@@ -12,8 +12,8 @@ namespace TaskManagement.Core.Application.Features.Commands.User
         public CreateUserCommand(UserDto user) => User = user;
         public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
         {
-            protected readonly IUserRepository _userRepository;
-            protected readonly IMapper _mapper;
+            private readonly IUserRepository _userRepository;
+            private readonly IMapper _mapper;
             public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper)
             {
                 _userRepository = userRepository;

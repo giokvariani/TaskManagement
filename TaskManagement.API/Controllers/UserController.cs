@@ -6,7 +6,6 @@ using TaskManagement.Core.Application.Dtos;
 using TaskManagement.Core.Application.Features.Commands.User;
 using TaskManagement.Core.Application.Features.Queries.User;
 using TaskManagement.Core.Application.Interfaces;
-using TaskManagement.Core.Domain.Entities;
 
 namespace TaskManagement.API.Controllers
 {
@@ -15,13 +14,9 @@ namespace TaskManagement.API.Controllers
     [AdminPrivilege]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        public UserController(IUserRepository userRepository, IMapper mapper, IMediator mediator)
+        public UserController(IMediator mediator)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
             _mediator = mediator;
         }
 
@@ -32,13 +27,19 @@ namespace TaskManagement.API.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var users = await _mediator.Send(new GetUsersQuery());
+            return Ok(users);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(UserDto createUserDto)
         {
             var result = await _mediator.Send(new CreateUserCommand(createUserDto));
             return Ok(result);
         }
-
 
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
@@ -54,17 +55,17 @@ namespace TaskManagement.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("DefineRole")]
-        public async Task<ActionResult> DefineRole(int userId, int roleId)
+        [HttpPost("EnableRole")]
+        public async Task<ActionResult> EnableRole(int userId, int roleId)
         {
-            var result = await _userRepository.DefineRole(userId, roleId);
+            var result = await _mediator.Send(new EnableRoleCommand(userId, roleId));
             return Ok(result);
         }
 
-        [HttpDelete("DeleteRole")]
-        public async Task<ActionResult> DeleteRule(int userId, int roleId)
+        [HttpDelete("DisableRole")]
+        public async Task<ActionResult> DisableRole(int userId, int roleId)
         {
-            var result = await _userRepository.DeleteRole(userId, roleId);
+            var result = await _mediator.Send(new DisableRoleCommand(userId, roleId));
             return Ok(result);
         }
     }

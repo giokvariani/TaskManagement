@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TaskManagement.Core.Application.Exceptions;
 using TaskManagement.Core.Application.Interfaces;
