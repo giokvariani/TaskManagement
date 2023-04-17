@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 using TaskManagement.API.Middlewares;
 using TaskManagement.Core.Application.ExtensionMethods;
@@ -11,6 +12,7 @@ using TaskManagement.Infrastructure.Persistence.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Configuration.AddLoggerLayer();

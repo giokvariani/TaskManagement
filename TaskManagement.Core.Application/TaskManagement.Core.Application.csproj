@@ -6,12 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Features\Commands\**" />
-    <EmbeddedResource Remove="Features\Commands\**" />
-    <None Remove="Features\Commands\**" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />
