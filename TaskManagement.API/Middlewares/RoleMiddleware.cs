@@ -51,16 +51,13 @@ namespace TaskManagement.API.Middlewares
                 await next(context);
                 return;
             }
-
             var controllerType = GetControllerType(context);
 
             var adminAuthorizeAttributes = controllerType.CustomAttributes.Where(x => x.AttributeType.Name == nameof(AdminPrivilegeAttribute));
             if (adminAuthorizeAttributes.Any())
-            {
                 throw new ValidationException("Access is denied");
-            }
-            var authorizeAttributes = controllerType.CustomAttributes.Where(x => x.AttributeType.Name == nameof(AuthorizeAttribute));
 
+            var authorizeAttributes = controllerType.CustomAttributes.Where(x => x.AttributeType.Name == nameof(AuthorizeAttribute));
             if (authorizeAttributes.Any())
             {
                 var persmissions = user.Roles.Select(x => x.Role.Persmissions);
@@ -68,7 +65,12 @@ namespace TaskManagement.API.Middlewares
                                                     .OfType<PermissionType>()
                                                     .Where(f => flag.HasFlag(f))
                                                     .ToArray()).Distinct().ToArray().Select(x => x.ToString());
-                if (flattenedArray.Any(x => x == context.Request.Method))
+                var methodVerb = context.Request.Method;
+                var targetHttpVerb = StaticHelper.StaticHelper.HttpVerbsMap.Where(x => x.Value.Length > 1 && x.Value.Any(v => v == methodVerb));
+                var httpMethodTarget = targetHttpVerb.Any() ? targetHttpVerb.Single().Key : methodVerb;
+
+
+                if (flattenedArray.Any(x => x == httpMethodTarget))
                     await next(context);
                 else
                     throw new ValidationException("Access Is Denied");
