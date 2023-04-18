@@ -31,15 +31,14 @@ namespace TaskManagement.Core.Application.Features.Commands.Issue
             }
             public async Task<int> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
             {
-                var issueDto = _mapper.Map<IssueDto>(request.Issue);
                 var user = await request.User.MapToDatabase(_userRepository);
+                var issue = _mapper.Map<Domain.Entities.Issue>(request.Issue);
 
-                issueDto.ReporterId = user.Id;
-                issueDto.Status = Domain.Enums.IssueStatusType.Open;
+                issue.ReporterId = user.Id;
+                issue.Status = Domain.Enums.IssueStatusType.Open;
 
-                var Issue = _mapper.Map<Domain.Entities.Issue>(issueDto);
-                var result = await _issueRepository.CreateAsync(Issue);
-                return Issue.Id;
+                var result = await _issueRepository.CreateAsync(issue);
+                return issue.Id;
             }
         }
     }
