@@ -25,13 +25,15 @@ namespace TaskManagement.API.Controllers
         [HttpPost("GenerateToken")]
         public async Task<ActionResult> GenerateToken(string identifier, string password)
         {
+            var validTokenDuration = _configiuration.GetValue<int>("ValidTokenDuration");
+
             var user = (await _userRepository.GetAsync(x => (x.UserName == identifier || x.Email == identifier) && x.Password == password)).SingleOrDefault();
             if (user == null)
                 throw new InvalidOperationException("Invalid identifier or password");
 
             var tokens = await _personalAccessTokenRepository.GetAsync(x => x.UserId == user.Id);
             var lastToken = tokens.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-            if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(-20))
+            if (lastToken != null && lastToken.CreatedOn > DateTime.Now.AddMinutes(validTokenDuration))
                 return BadRequest("Please use already generated token");
 
             var jwt = _configiuration.GetSection("Jwt").Get<Jwt>();
@@ -47,9 +49,9 @@ namespace TaskManagement.API.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             //TO DO expire Config
-            var token = new JwtSecurityToken(jwt.Issuer, jwt.Audience, claims, expires: DateTime.Now.AddMinutes(20), signingCredentials: signIn);
+            var token = new JwtSecurityToken(jwt.Issuer, jwt.Audience, claims, expires: DateTime.Now.AddMinutes(validTokenDuration), signingCredentials: signIn);
             var generatedKey = new JwtSecurityTokenHandler().WriteToken(token);
-            var personalAccessToken = new PersonalAccessToken() { Identifier = identifier, Password = password, CreatedOn = DateTime.Now, UserId = user.Id, Value = generatedKey };
+            var personalAccessToken = new PersonalAccessToken() { Identifier = identifier, Password = password, UserId = user.Id, Value = generatedKey };
             await _personalAccessTokenRepository.CreateAsync(personalAccessToken);
             return Ok(generatedKey);
         }
@@ -57,9 +59,10 @@ namespace TaskManagement.API.Controllers
         [HttpGet("ShowValidToken")]
         public async Task<ActionResult> ShowValidToken(string identifier, string password)
         {
+            var validTokenDuration = _configiuration.GetValue<int>("ValidTokenDuration");
             var personalAccessTokens = (await _personalAccessTokenRepository.GetAsync(x => x.Identifier == identifier && password == x.Password)).ToList();
             //TO DO expire Config
-            var activeTokens = personalAccessTokens.Where(x => x.CreatedOn.AddMinutes(20) > DateTime.Now).OrderBy(x => x.Identifier);
+            var activeTokens = personalAccessTokens.Where(x => x.CreatedOn.AddMinutes(validTokenDuration) > DateTime.Now).OrderBy(x => x.Identifier);
             return Ok(activeTokens);
         }
     }

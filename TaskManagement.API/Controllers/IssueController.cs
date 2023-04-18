@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Core.Application.Dtos;
-using TaskManagement.Core.Application.Interfaces;
-using TaskManagement.Core.Domain.Entities;
+using TaskManagement.Core.Application.Features.Commands.Issue;
+using TaskManagement.Core.Application.Features.Queries.Issue;
 
 namespace TaskManagement.API.Controllers
 {
@@ -12,51 +12,44 @@ namespace TaskManagement.API.Controllers
     [Authorize]
     public class IssueController : ControllerBase
     {
-        private readonly IIssueRepository _issueRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-
-        public IssueController(IIssueRepository issueRepository, IUserRepository userRepository, IMapper mapper)
+        private readonly IMediator _mediator;
+        public IssueController(IMediator mediator)
         {
-            _issueRepository = issueRepository;
-            _userRepository = userRepository;
-            _mapper = mapper;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Create(IssueDto issueDto)
-        {
-            var userName = User.Claims.SingleOrDefault(x => x.Type == "UserName")?.Value;
-            var password = User.Claims.SingleOrDefault(x => x.Type == "Password")?.Value;
-            var user = (await _userRepository.GetAsync(x => x.UserName == userName)).Single();
-            issueDto.ReporterId = user.Id;
-            issueDto.Status = Core.Domain.Enums.IssueStatusType.Open;
-
-            var issue = _mapper.Map<Issue>(issueDto);
-            var result = await _issueRepository.CreateAsync(issue);
-            return Ok(result);
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var Issue = await _issueRepository.GetAsync(id);
+            var issue = await _mediator.Send(new GetIssueQuery(id));
+            return Ok(issue);
+        }
 
-            return Ok(Issue);
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var issues = await _mediator.Send(new GetIssuesQuery());
+            return Ok(issues);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(IssueDto createIssueDto)
+        {
+            var result = await _mediator.Send(new CreateIssueCommand(createIssueDto, User));
+            return Ok(result);
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _issueRepository.DeleteAsync(id);
+            var result = await _mediator.Send(new DeleteIssueCommand(id));
             return Ok(result);
         }
 
         [HttpPut]
         public async Task<ActionResult> Update(IdempotentIssueDto idempotentIssueDto)
         {
-            var Issue = _mapper.Map<Issue>(idempotentIssueDto);
-            var result = await _issueRepository.UpdateAsync(Issue);
+            var result = await _mediator.Send(new UpdateIssueCommand(idempotentIssueDto));
             return Ok(result);
         }
     }
