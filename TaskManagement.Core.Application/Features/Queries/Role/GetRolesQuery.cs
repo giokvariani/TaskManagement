@@ -5,9 +5,9 @@ using TaskManagement.Core.Application.Interfaces;
 
 namespace TaskManagement.Core.Application.Features.Queries.Role
 {
-    public class GetRolesQuery : IRequest<IReadOnlyCollection<IdempotentRoleDto>>
+    public class GetRolesQuery : IRequest<IReadOnlyCollection<IdentifierRoleDto>>
     {
-        public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, IReadOnlyCollection<IdempotentRoleDto>>
+        public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, IReadOnlyCollection<IdentifierRoleDto>>
         {
             private readonly IRoleRepository _roleRepository;
             private readonly IMapper _mapper;
@@ -16,10 +16,10 @@ namespace TaskManagement.Core.Application.Features.Queries.Role
                 _roleRepository = roleRepository;
                 _mapper = mapper;
             }
-            public async Task<IReadOnlyCollection<IdempotentRoleDto>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
+            public async Task<IReadOnlyCollection<IdentifierRoleDto>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
             {
                 var roles = await _roleRepository.GetAsync();
-                var idempotentRolesDto = roles.Select(x => _mapper.Map<IdempotentRoleDto>(x));
+                var idempotentRolesDto = roles.Select(x => _mapper.Map<IdentifierRoleDto>(x));
                 return idempotentRolesDto.ToList().AsReadOnly();
             }
         }

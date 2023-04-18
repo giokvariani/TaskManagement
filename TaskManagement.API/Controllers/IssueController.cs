@@ -33,7 +33,7 @@ namespace TaskManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(IssueDto createIssueDto)
+        public async Task<ActionResult> Create(CreateIssueDto createIssueDto)
         {
             var result = await _mediator.Send(new CreateIssueCommand(createIssueDto, User));
             return Ok(result);
@@ -42,14 +42,14 @@ namespace TaskManagement.API.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _mediator.Send(new DeleteIssueCommand(id));
+            var result = await _mediator.Send(new DeleteIssueCommand(id, User));
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(IdempotentIssueDto idempotentIssueDto)
+        public async Task<ActionResult> Update(UpdateIssueDto idempotentIssueDto)
         {
-            var result = await _mediator.Send(new UpdateIssueCommand(idempotentIssueDto));
+            var result = await _mediator.Send(new UpdateIssueCommand(idempotentIssueDto, User));
             return Ok(result);
         }
     }

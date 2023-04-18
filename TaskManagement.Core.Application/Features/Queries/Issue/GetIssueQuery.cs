@@ -6,14 +6,14 @@ using TaskManagement.Core.Application.Interfaces;
 
 namespace TaskManagement.Core.Application.Features.Queries.Issue
 {
-    public class GetIssueQuery : IRequest<IdempotentIssueDto>
+    public class GetIssueQuery : IRequest<IdentifierIssueDto>
     {
         public int IssueId { get; }
         public GetIssueQuery(int issueId)
         {
             IssueId = issueId;
         }
-        public class GetIssueQueryHandler : IRequestHandler<GetIssueQuery, IdempotentIssueDto>
+        public class GetIssueQueryHandler : IRequestHandler<GetIssueQuery, IdentifierIssueDto>
         {
             private readonly IIssueRepository _issueRepository;
             private readonly IMapper _mapper;
@@ -22,12 +22,12 @@ namespace TaskManagement.Core.Application.Features.Queries.Issue
                 _issueRepository = issueRepository;
                 _mapper = mapper;
             }
-            public async Task<IdempotentIssueDto> Handle(GetIssueQuery request, CancellationToken cancellationToken)
+            public async Task<IdentifierIssueDto> Handle(GetIssueQuery request, CancellationToken cancellationToken)
             {
                 var issue = await _issueRepository.GetAsync(request.IssueId);
                 if (issue == null)
                     throw new EntityNotFoundException();
-                var idempotentIssue = _mapper.Map<IdempotentIssueDto>(issue);
+                var idempotentIssue = _mapper.Map<IdentifierIssueDto>(issue);
                 return idempotentIssue;
             }
         }

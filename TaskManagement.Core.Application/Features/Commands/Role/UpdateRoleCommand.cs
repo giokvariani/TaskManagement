@@ -7,11 +7,11 @@ namespace TaskManagement.Core.Application.Features.Commands.Role
 {
     public class UpdateRoleCommand : IRequest<int>
     {
-        public UpdateRoleCommand(IdempotentRoleDto role)
+        public UpdateRoleCommand(IdentifierRoleDto role)
         {
             Role = role;
         }
-        public IdempotentRoleDto Role { get; }
+        public IdentifierRoleDto Role { get; }
         public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, int>
         {
             private readonly IRoleRepository _roleRepository;

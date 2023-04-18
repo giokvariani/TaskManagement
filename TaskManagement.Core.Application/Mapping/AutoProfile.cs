@@ -9,11 +9,14 @@ namespace TaskManagement.Core.Application.Mapping
         public AutoProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<User, IdempotentUserDto>().ReverseMap();
+            CreateMap<User, IdentifierUserDto>().ReverseMap();
             CreateMap<Role, RoleDto>().ReverseMap();
-            CreateMap<Role, IdempotentRoleDto>().ReverseMap();
+            CreateMap<Role, IdentifierRoleDto>().ReverseMap();
             CreateMap<Issue, IssueDto>().ReverseMap();
-            CreateMap<Issue, IdempotentIssueDto>().ReverseMap();
+            CreateMap<Issue, IdentifierIssueDto>().ReverseMap();
+            CreateMap<IssueDto, CreateIssueDto>().ReverseMap();
+            CreateMap<Issue, UpdateIssueDto>().ReverseMap();
+
         }
     }
 }

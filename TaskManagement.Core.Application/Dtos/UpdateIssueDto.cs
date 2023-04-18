@@ -2,9 +2,9 @@
 
 namespace TaskManagement.Core.Application.Dtos
 {
-    public class IssueDto : CreateIssueDto
+    public class UpdateIssueDto : CreateIssueDto
     {
-        public int ReporterId { get; set; }
         public IssueStatusType Status { get; set; }
+        public int Id { get; set; }
     }
 }

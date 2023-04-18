@@ -47,7 +47,7 @@ namespace TaskManagement.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(IdempotentRoleDto idempotentRoleDto)
+        public async Task<ActionResult> Update(IdentifierRoleDto idempotentRoleDto)
         {
             var result = await _mediator.Send(new UpdateRoleCommand(idempotentRoleDto));
             return Ok(result);

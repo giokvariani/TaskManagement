@@ -7,11 +7,11 @@ namespace TaskManagement.Core.Application.Features.Commands.User
 {
     public class UpdateUserCommand : IRequest<int>
     {
-        public UpdateUserCommand(IdempotentUserDto user)
+        public UpdateUserCommand(IdentifierUserDto user)
         {
             User = user;
         }
-        public IdempotentUserDto User { get; }
+        public IdentifierUserDto User { get; }
         public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, int>
         {
             private readonly IUserRepository _userRepository;

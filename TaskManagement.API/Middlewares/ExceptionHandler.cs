@@ -40,7 +40,7 @@ namespace TaskManagement.API.Middlewares
                     break;
                 case Exception _:
                     Serilog.Log.Error(exception, exception.Message);
-                    exception = new Exception("Internal Server Error");
+                    //exception = new Exception("Internal Server Error");
                     break;
             }
 
