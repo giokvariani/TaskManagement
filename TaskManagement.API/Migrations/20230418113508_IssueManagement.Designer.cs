@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagement.Infrastructure.Persistence.DataLayer;
 
@@ -11,9 +12,11 @@ using TaskManagement.Infrastructure.Persistence.DataLayer;
 namespace TaskManagement.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230418113508_IssueManagement")]
+    partial class IssueManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +188,16 @@ namespace TaskManagement.API.Migrations
                     b.HasOne("TaskManagement.Core.Domain.Entities.User", "Assignee")
                         .WithMany("AssignedIssues")
                         .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.NoAction
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        )
                         .IsRequired();
 
                     b.HasOne("TaskManagement.Core.Domain.Entities.User", "Reporter")
