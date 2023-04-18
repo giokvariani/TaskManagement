@@ -10,7 +10,5 @@
         public ICollection<Issue> ReportedIssues { get; set; }
         public ICollection<Issue> AssignedIssues { get; set; }
         public ICollection<User2Role> Roles { get; set; }
-        //public ICollection<PersonalAccessToken> PersonalAccessTokens { get; set; }
-
     }
 }
