@@ -9,11 +9,6 @@ namespace TaskManagement.Infrastructure.Persistence.ExtensionMethods
 {
     public static class ServiceExtensions
     {
-        public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("TaskManagement.API")));
-        }
-
         public static void AddLoggerLayer(this IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");

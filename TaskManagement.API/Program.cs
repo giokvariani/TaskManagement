@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TaskManagement.API.Middlewares;
 using TaskManagement.Core.Application.ExtensionMethods;
 using TaskManagement.Core.Application.Interfaces;
+using TaskManagement.Infrastructure.Persistence.DataLayer;
 using TaskManagement.Infrastructure.Persistence.ExtensionMethods;
 using TaskManagement.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("TaskManagement.API")));
+
 builder.Configuration.AddLoggerLayer();
 builder.Services.AddApplicatonLayer();
 builder.Services.AddControllers().AddJsonOptions(options =>
