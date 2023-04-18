@@ -24,7 +24,7 @@ namespace TaskManagement.Core.Application.Features.Queries.User
             }
             public async Task<IdentifierUserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
             {
-                var user = await _userRepository.GetAsync(request.UserId);
+                var user = (await _userRepository.GetAsync(x => x.Id == request.UserId)).SingleOrDefault();
                 if (user == null)
                     throw new EntityNotFoundException();
                 var idempotentUser = _mapper.Map<IdentifierUserDto>(user);
