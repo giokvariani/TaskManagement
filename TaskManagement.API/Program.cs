@@ -6,9 +6,11 @@ using System.Text;
 using TaskManagement.API.Middlewares;
 using TaskManagement.Core.Application.ExtensionMethods;
 using TaskManagement.Core.Application.Interfaces;
+using TaskManagement.Core.Application.Services;
 using TaskManagement.Infrastructure.Persistence.DataLayer;
 using TaskManagement.Infrastructure.Persistence.ExtensionMethods;
 using TaskManagement.Infrastructure.Persistence.Repositories;
+using TaskManagement.Infrastructure.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,7 @@ builder.Services.AddScoped<IPersonalAccessTokenRepository, PersonalAccessTokenRe
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 builder.Services.AddScoped<IUser2RoleRepository, User2RoleRepository>();
+builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
 
 
 builder.Services.AddScoped<RoleMiddleware>();

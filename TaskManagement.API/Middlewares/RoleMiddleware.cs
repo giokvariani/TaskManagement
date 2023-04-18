@@ -1,8 +1,10 @@
-﻿using FluentValidation;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using TaskManagement.API.Attributes;
 using TaskManagement.Core.Application.Exceptions;
+using TaskManagement.Core.Application.ExtensionMethods;
 using TaskManagement.Core.Application.Interfaces;
 using TaskManagement.Core.Domain.Enums;
 
@@ -16,7 +18,7 @@ namespace TaskManagement.API.Middlewares
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
-        private Type GetControllerType(HttpContext context)
+        private Maybe<Type> GetControllerType(HttpContext context)
         {
             var endpoint = context.GetEndpoint();
 
@@ -24,32 +26,42 @@ namespace TaskManagement.API.Middlewares
             {
                 return descriptor.ControllerTypeInfo.AsType();
             }
-            return null;
+            return Maybe<Type>.None;
 
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+
             if ((!context.User?.Identity?.IsAuthenticated) ?? true)
             {
                 await next(context); 
                 return;
             }
-            var userName = context.User.Claims.SingleOrDefault(x => x.Type == "UserName")?.Value;
-            var password = context.User.Claims.SingleOrDefault(x => x.Type == "Password")?.Value;
+
+            var userName = context.User.GetDataFromClaims("UserName");
+            var password = context.User.GetDataFromClaims("Password");
             if (userName == null && password == null)
                 throw new InvalidOperationException("Generate Token at First and input like -> Bearer ey7......mgl");
+
             await using var scope = _serviceScopeFactory.CreateAsyncScope();
             var userRepository = scope.ServiceProvider.GetService<IUserRepository>()!;
-            var user = (await userRepository.GetAsync(x => x.UserName == userName && x.Password == password)).SingleOrDefault();
+            var user = (await userRepository.GetAsync(x => x.UserName == userName && x.Password == password))
+                .SingleOrDefault();
             if (user == null)
                 throw new EntityNotFoundException();
+
             var userIsAdmin = user.Roles.Select(x => x.Role).Any(x => x.IsAdmin);
             if (userIsAdmin)
             {
                 await next(context);
                 return;
             }
-            var controllerType = GetControllerType(context);
+
+            var potentialControllerType = GetControllerType(context);
+            if (potentialControllerType.HasNoValue)
+                throw new InvalidOperationException("Couldn't figure out which controller it is");
+
+            var controllerType = potentialControllerType.Value;
 
             var adminAuthorizeAttributes = controllerType.CustomAttributes.Where(x => x.AttributeType.Name == nameof(AdminPrivilegeAttribute));
             if (adminAuthorizeAttributes.Any())

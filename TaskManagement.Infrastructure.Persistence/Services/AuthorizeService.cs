@@ -75,7 +75,7 @@ namespace TaskManagement.Infrastructure.Persistence.Services
             var generatedKey = new JwtSecurityTokenHandler().WriteToken(token);
             var personalAccessToken = new PersonalAccessToken() { Identifier = user.Email, Password = user.Password, UserId = user.Id, Value = generatedKey };
             await _personalAccessTokenRepository.CreateAsync(personalAccessToken);
-            return Ok(generatedKey);
+            return generatedKey;
         }
     }
 }
