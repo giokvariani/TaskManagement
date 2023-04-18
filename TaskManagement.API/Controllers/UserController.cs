@@ -39,12 +39,12 @@ namespace TaskManagement.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var result = await _mediator.Send(new DeleteUserCommand(id));
-            return Ok(result);
-        }
+        //[HttpDelete]
+        //public async Task<ActionResult> Delete(int id)
+        //{
+        //    var result = await _mediator.Send(new DeleteUserCommand(id));
+        //    return Ok(result);
+        //}
 
         [HttpPut]
         public async Task<ActionResult> Update(IdentifierUserDto idempotentUserDto)
