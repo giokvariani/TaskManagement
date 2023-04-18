@@ -2,6 +2,7 @@
 using MediatR;
 using System.Security.Claims;
 using TaskManagement.Core.Application.Dtos;
+using TaskManagement.Core.Application.Exceptions;
 using TaskManagement.Core.Application.ExtensionMethods;
 using TaskManagement.Core.Application.Interfaces;
 
@@ -31,10 +32,12 @@ namespace TaskManagement.Core.Application.Features.Commands.Issue
             }
             public async Task<int> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
             {
-                var user = await request.User.MapToDatabase(_userRepository);
-                var issue = _mapper.Map<Domain.Entities.Issue>(request.Issue);
+                var potentialUser = await request.User.MapToDatabase(_userRepository);
+                if (potentialUser.HasNoValue)
+                    throw new UnknownUserException();
 
-                issue.ReporterId = user.Id;
+                var issue = _mapper.Map<Domain.Entities.Issue>(request.Issue);
+                issue.ReporterId = potentialUser.Value.Id;
                 issue.Status = Domain.Enums.IssueStatusType.Open;
 
                 var result = await _issueRepository.CreateAsync(issue);

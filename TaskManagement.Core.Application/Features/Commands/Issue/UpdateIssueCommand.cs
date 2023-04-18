@@ -35,7 +35,13 @@ namespace TaskManagement.Core.Application.Features.Commands.Issue
                 if (issueFromDb == null)
                     throw new EntityNotFoundException();
 
-                var currentUser = await request.User.MapToDatabase(_userRepository);
+                var potentialUser = await request.User.MapToDatabase(_userRepository);
+                if (potentialUser.HasNoValue)
+                    throw new UnknownUserException();
+
+                var currentUser = potentialUser.Value;
+
+
                 var currentUserIsAdmin = currentUser.Roles.Select(x => x.Role).Any(x => x.IsAdmin);
 
                 if (!currentUserIsAdmin && currentUser.Id != issueFromDb.ReporterId && currentUser.Id != issueFromDb.AssigneeId)
