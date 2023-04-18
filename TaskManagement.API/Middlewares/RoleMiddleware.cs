@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using TaskManagement.API.Attributes;
+using TaskManagement.API.Controllers;
 using TaskManagement.Core.Application.Exceptions;
 using TaskManagement.Core.Application.ExtensionMethods;
 using TaskManagement.Core.Application.Interfaces;
@@ -20,6 +21,7 @@ namespace TaskManagement.API.Middlewares
         }
         private Maybe<Type> GetControllerType(HttpContext context)
         {
+            
             var endpoint = context.GetEndpoint();
 
             if (endpoint?.Metadata?.GetMetadata<ControllerActionDescriptor>() is ControllerActionDescriptor descriptor)
@@ -32,7 +34,14 @@ namespace TaskManagement.API.Middlewares
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
 
-            if ((!context.User?.Identity?.IsAuthenticated) ?? true)
+
+            var potentialControllerType = GetControllerType(context);
+            if (potentialControllerType.HasNoValue)
+                throw new InvalidOperationException("Couldn't figure out which controller it is");
+
+            var isNotAuthenticated = (!context.User?.Identity?.IsAuthenticated) ?? true;
+            var isAuthorizeController = potentialControllerType.Value == typeof(AuthorizeController);
+            if (isNotAuthenticated && isAuthorizeController)
             {
                 await next(context); 
                 return;
@@ -57,9 +66,6 @@ namespace TaskManagement.API.Middlewares
                 return;
             }
 
-            var potentialControllerType = GetControllerType(context);
-            if (potentialControllerType.HasNoValue)
-                throw new InvalidOperationException("Couldn't figure out which controller it is");
 
             var controllerType = potentialControllerType.Value;
 
