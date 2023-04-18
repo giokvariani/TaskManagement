@@ -42,6 +42,7 @@ namespace TaskManagement.Core.Application.Features.Commands.Issue
                     throw new ValidationException("Access is denied");
 
                 var issue = _mapper.Map<Domain.Entities.Issue>(request.Issue);
+                issue.ReporterId = issueFromDb.ReporterId;
                 var result = await _issueRepository.UpdateAsync(issue);
                 return result;
             }
