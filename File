@@ -1,0 +1,253 @@
+ 
+
+while (true)
+{
+    Console.WriteLine("How do you want to create API? Automatically Or Manually");
+    var howResult = Console.ReadLine();
+    if (howResult.ToLower().StartsWith("aut"))
+    {
+    }
+    else if (howResult.ToLower().StartsWith("man"))
+    {
+        var path = @"C:\Users\Giorgi.Kvariani\source\repos\Experiment";
+        var files = Directory.GetFiles(path);
+
+ 
+
+ 
+
+        Console.WriteLine("Do you want to create folders?");
+        var value = Console.ReadLine();
+
+ 
+
+        if (value.StartsWith("ye"))
+        {
+            while (true)
+            {
+                Console.WriteLine("Input folder name");
+                var input = Console.ReadLine();
+                if (input == "anymore")
+                    break;
+                Directory.CreateDirectory(Path.Combine(path, input));
+            }
+
+
+ 
+
+        }
+
+ 
+
+ 
+
+        if (!files.All(x => x.Contains(".sln")) || !files.Any())
+            Solution.Create($@"{path}\YourLibrary.sln");
+
+ 
+
+        int iteratorCount = 0;
+
+ 
+
+        while (true)
+        {
+
+ 
+
+            var directories = Directory.GetDirectories(path).Where(x => !x.Contains(".vs"));
+            var numericDirectories = directories.Select((x, y) => string.Concat($"{y + 1}) {x}"));
+            Console.WriteLine("Choose number of path");
+            foreach (var item in numericDirectories)
+            {
+                Console.WriteLine(item);
+            }
+
+ 
+
+            var numberOfPath = Console.ReadLine();
+            if (numberOfPath == "anymore")
+                break;
+            var numericTargetPath = numericDirectories.Where(x => x.Split(')').First() == numberOfPath);
+            var targetPath = numericTargetPath.Single().Split(") ").Last();
+
+ 
+
+ 
+
+ 
+
+ 
+
+            iteratorCount++;
+            Console.WriteLine($"{iteratorCount} Please type Project Name correctly");
+            var directoryName = Console.ReadLine();
+            Console.WriteLine("Which project type do you want to create? Console or Library");
+            var outputType = Console.ReadLine();
+            string output = string.Empty;
+            if (outputType.ToLower().StartsWith("con"))
+            {
+                output = "Exe";
+            }
+            else if (outputType.ToLower().StartsWith("lib"))
+            {
+                output = "Library";
+
+ 
+
+            }
+            else
+            {
+                Console.WriteLine("Please type output type correctly");
+                continue;
+            }
+            Project.Create(targetPath, directoryName, output);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Please type word correctly");
+    }
+
+ 
+
+}
+
+ 
+
+public static class Solution
+{
+    public static void Create(string path)
+    {
+        string solutionContent = GetSolutionFileContent();
+        File.WriteAllText(path, solutionContent);
+
+ 
+
+        Console.WriteLine("Solution file created successfully!");
+
+ 
+
+    }
+
+ 
+
+ 
+
+    static string GetSolutionFileContent()
+    {
+        return @"Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Global
+    GlobalSection(SolutionProperties) = preSolution
+        HideSolutionNode = FALSE
+    EndGlobalSection
+    GlobalSection(ExtensibilityGlobals) = postSolution
+        SolutionGuid = {8657FB76-B048-4D3F-BB30-45840DE6FA1D}
+    EndGlobalSection
+EndGlobal";
+    }
+}
+
+ 
+
+ 
+
+public static class Project
+{
+    public static void Create(string path, string directoryName, string outputType)
+    {
+        string content = $@"<Project Sdk=""Microsoft.NET.Sdk"">
+<PropertyGroup>
+<OutputType>{outputType}</OutputType>
+<TargetFramework>net6.0</TargetFramework>
+<ImplicitUsings>enable</ImplicitUsings>
+<Nullable>enable</Nullable>
+</PropertyGroup>
+</Project>";
+
+ 
+
+ 
+
+        var completeDirectoryName = string.Join('.', path.Split($"\\").TakeLast(2));
+        var combineDirectoryName = $"{completeDirectoryName}.{directoryName}";
+
+ 
+
+        var projectPath = Path.Combine(path, combineDirectoryName);
+        Directory.CreateDirectory(projectPath);
+
+ 
+
+        // Create the project file
+        string projectFile = Path.Combine(projectPath, $"{completeDirectoryName}.csproj");
+        File.WriteAllText(projectFile, content);
+
+ 
+
+        Console.WriteLine("Class library project created successfully!");
+
+ 
+
+        File.Create(outputType == "Library" ? Path.Combine(projectPath, "class1.cs") : Path.Combine(projectPath, "program.cs"));
+
+ 
+
+ 
+
+        var projectSlnContent = GenerateProjectString(completeDirectoryName, projectFile);
+        AddToSolution(@"C:\Users\Giorgi.Kvariani\source\repos\Experiment", projectSlnContent);
+    }
+
+ 
+
+    //public static void CreateCore()
+
+ 
+
+ 
+
+    public static string GenerateProjectString(string projectName, string projectPath)
+    {
+        var splitValues = projectPath.Split('\\');
+        var csrpojName = splitValues.Last();
+        var parentDirectoryName = splitValues.SkipLast(1).Last();
+
+ 
+
+        var projectPathForSln = string.Join('\\', parentDirectoryName, csrpojName);
+
+ 
+
+        var projectTypeGuid = Guid.NewGuid();
+        var projectGuid = Guid.NewGuid();
+        string projectString = $"Project(\"{projectTypeGuid}\") = \"{projectName}\", \"{projectPathForSln}\", \"{projectGuid}\"\nEndProject";
+        return projectString;
+    }
+
+ 
+
+    public static void AddToSolution(string path, string slnContent)
+    {
+        var files = Directory.GetFiles(path);
+        var slnFile = files.SingleOrDefault(x => x.Contains(".sln"));
+        var value = File.ReadAllText(slnFile);
+
+ 
+
+        int index = value.IndexOf("Global");
+        string part1 = value.Substring(0, index);
+        string part2 = value.Substring(index);
+
+ 
+
+        var finalValue = string.Concat(part1, slnContent, Environment.NewLine, part2);
+        File.WriteAllText(slnFile, finalValue);
+    }
+
+ 
+
+}
