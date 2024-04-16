@@ -1,0 +1,14 @@
+    public static IConnection TryConnection(this IConnectionFactory factory, IEnumerable<AmqpTcpEndpoint> hosts, ILogger logger, TimeSpan reconnectInterval, int reconnectCount)
+        {
+            var policy = Policy.Handle<Exception>()
+                   .WaitAndRetry(reconnectCount, x => reconnectInterval,
+                   (ex, TimeSpan, retry, context) =>
+                   {
+                       logger.LogError(ex, "retrying connecting to rabbitmq {uri} {retryAttempt}", factory.Uri.AbsoluteUri, retry);
+                   });
+
+            return policy.Execute(() =>
+            {
+                return factory.CreateConnection(hosts.ToList());
+            });
+        }
