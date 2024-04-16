@@ -1,0 +1,77 @@
+public interface IMqConnectionManager : IDisposable
+    {
+        IConnection GetOrCreateConnection();
+    }
+    public class MqConnectionManager : IMqConnectionManager
+    {
+        private readonly IConnectionFactory _connectionFactory;
+        private static readonly object _connectionLocker = new();
+
+        private readonly ILogger<MqConnectionManager> _logger;
+        private readonly RabbitMqConfig _config;
+
+        private IConnection _connection;
+        public IConnection GetOrCreateConnection()
+        {
+            if (_connection != null && _connection.IsOpen)
+            {
+                return _connection;
+            }
+            lock (_connectionLocker)
+            {
+                if (_connection != null && _connection.IsOpen)
+                {
+                    return _connection;
+                }
+
+                _connection = _connectionFactory.TryConnection(_config.MqHosts(), _logger, TimeSpan.FromSeconds(RabbitDefaults.ConnectRetryIntervalSeconds), RabbitDefaults.ConnectRetryCount);
+                
+                _connection.ConnectionShutdown += OnShutdown;
+                _connection.ConnectionBlocked += OnBlocked;
+                _connection.ConnectionUnblocked += OnUnblocked;
+
+                return _connection;
+            }
+        }
+
+        public MqConnectionManager(ILogger<MqConnectionManager> logger, IOptions<RabbitMqConfig> options)
+        {
+            _config = options?.Value ?? throw new ArgumentNullException("rabbitmq config is null");
+            _logger = logger;
+
+            _connectionFactory = new ConnectionFactory()
+            {
+                AutomaticRecoveryEnabled = true,
+                TopologyRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(RabbitDefaults.NetworkRecoveryIntervalSeconds),
+                UserName = _config.UserName,
+                Password = _config.Password,
+                VirtualHost = _config.VirtualHost,
+                DispatchConsumersAsync = true
+            };
+
+            GetOrCreateConnection();
+        }
+
+        private void OnShutdown(object? sender, ShutdownEventArgs ea)
+        {
+            _logger.LogError("RabbitMq Connection Shutdown: {reason}", ea.ToString());
+            GetOrCreateConnection();
+        }
+
+        private void OnBlocked(object? sender, ConnectionBlockedEventArgs ea)
+        {
+            _logger.LogWarning("RabbitMq Connection Blocked: {Reason}", ea.Reason);
+        }
+
+        private void OnUnblocked(object? sender, EventArgs ea)
+        {
+            _logger.LogWarning("RabbitMq Connection Unblocked");
+        }
+
+        public void Dispose()
+        {
+            _connection?.Close();
+            _connection?.Dispose();
+        }
+    }
